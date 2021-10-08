@@ -5,6 +5,9 @@
 *.tfstate
 *.tfstate.*
 
+# Ignore .devcontainer to be pushed
+**/.devcontainer/*
+
 # Crash log files
 crash.log
 
