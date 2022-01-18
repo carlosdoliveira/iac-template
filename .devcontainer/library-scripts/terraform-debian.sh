@@ -19,6 +19,8 @@ TFLINT_SHA256="${5:-"automatic"}"
 TERRAGRUNT_SHA256="${6:-"automatic"}"
 TERRAFORM_DOCS_VERSION="${7:-"latest"}"
 TERRAFORM_DOCS_SHA256="${8:-"automatic"}"
+PACKER_VERSION="${9:-"latest"}"
+PACKER_SHA256="${10:-"automatic"}"
 
 
 TERRAFORM_GPG_KEY="72D7468F"
@@ -28,12 +30,12 @@ keyserver hkps://keys.openpgp.org
 keyserver hkp://keyserver.pgp.com"
 
 architecture="$(uname -m)"
-case ${architecture} in
-    x86_64) architecture="amd64";;
-    aarch64 | armv8*) architecture="arm64";;
-    aarch32 | armv7* | armvhf*) architecture="arm";;
-    i?86) architecture="386";;
-    *) echo "(!) Architecture ${architecture} unsupported"; exit 1 ;;
+case ${architecture} in 
+    x86_64) architecture="amd64";; 
+    aarch64 | armv8*) architecture="arm64";; 
+    aarch32 | armv7* | armvhf*) architecture="arm";; 
+    i?86) architecture="386";; 
+    *) echo "(!) Architecture ${architecture} unsupported"; exit 1 ;; 
 esac
 
 if [ "$(id -u)" -ne 0 ]; then
@@ -160,6 +162,7 @@ find_version_from_git_tags TERRAFORM_VERSION 'https://github.com/hashicorp/terra
 find_version_from_git_tags TFLINT_VERSION 'https://github.com/terraform-linters/tflint'
 find_version_from_git_tags TERRAGRUNT_VERSION 'https://github.com/gruntwork-io/terragrunt'
 find_version_from_git_tags TERRAFORM_DOCS_VERSION 'https://github.com/terraform-docs/terraform-docs'
+find_version_from_git_tags PACKER_VERSION 'https://github.com/hashicorp/packer'
 
 mkdir -p /tmp/tf-downloads
 cd /tmp/tf-downloads
@@ -223,6 +226,13 @@ if [ "${TERRAFORM_DOCS_VERSION}" != "none" ]; then
     wget -O /tmp/tf-downloads/${terraform_docs_filename}.tar.gz "https://github.com/terraform-docs/terraform-docs/releases/download/v${TERRAFORM_DOCS_VERSION}/${terraform_docs_filename}-v${TERRAFORM_DOCS_VERSION}-linux-${architecture}.tar.gz"
     tar -xzf /tmp/tf-downloads/${terraform_docs_filename}.tar.gz
     mv -f /tmp/tf-downloads/${terraform_docs_filename} /usr/local/bin/terraform-docs
+fi
+if [ "${PACKER_VERSION}" != "none" ]; then
+    echo "Downloading packer..."
+    packer_filename="packer_${PACKER_VERSION}_linux_${architecture}.zip"
+    wget -O /tmp/tf-downloads/${packer_filename} "https://releases.hashicorp.com/packer/${PACKER_VERSION}/${packer_filename}"
+    unzip /tmp/tf-downloads/${packer_filename}
+    mv -f /tmp/tf-downloads/packer /usr/local/bin/packer
 fi
 
 rm -rf /tmp/tf-downloads ${GNUPGHOME}

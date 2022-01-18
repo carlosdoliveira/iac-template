@@ -5,15 +5,16 @@
 	"build": {
 		"dockerfile": "Dockerfile",
 		"args": { 
-			"TERRAFORM_VERSION": "1.0.7",
-			"TFLINT_VERSION": "0.32.1",
+			"TERRAFORM_VERSION": "1.1.2",
+			"TFLINT_VERSION": "0.34.1",
 			"TERRAGRUNT_VERSION": "none",
 			"INSTALL_AZURE_CLI": "true",
 			"INSTALL_DOCKER": "true",
 			"NODE_VERSION": "lts/*",
 			"INSTALL_ZSH": "false",
 			"UPGRADE_PACKAGES": "true",
-			"TERRAFORM_DOCS_VERSION": "0.15.0"
+			"TERRAFORM_DOCS_VERSION": "0.16.0",
+			"PACKER_VERSION" : "1.7.8"
 		}
 	},
 	"mounts": [ "source=/var/run/docker.sock,target=/var/run/docker-host.sock,type=bind" ],
@@ -49,7 +50,8 @@
 		"redhat.ansible",
 		"eamodio.gitlens",
 		"wakatime.vscode-wakatime",
-		"pkief.material-icon-theme"
+		"pkief.material-icon-theme",
+		"4ops.packer"
 	],
 
 	// Use 'forwardPorts' to make a list of ports inside the container available locally.
